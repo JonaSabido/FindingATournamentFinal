@@ -9,6 +9,15 @@ using FindingATournamentApp.Domain.Entities;
 using FindingATournamentApp.Domain.Dtos;
 using FindingATournamentApp.Infraestructure.Repositories;
 
+// Universidad Tecnológica Metropolitana
+// Aplicaciones Web Orientada a Servicios
+// Maestro: Joel Ivan Chuc UC
+// Actividad: Solucion Tecnica del Proyecto
+// Integrantes del equipo: Balam Rosas Christian Jesús, Herrera Caro Abraham Enrique, Sabido Reynoso Jonathan Missael
+// 4C
+// Parcial 2
+// Entrega: 02/11/2021
+
 namespace FindingATournamentApp.Controllers
 {
     [Route("api/[controller]")]

@@ -5,6 +5,15 @@ using System.Threading.Tasks;
 using FindingATournamentApp.Domain.Entities;
 using FindingATournamentApp.Infraestructure.Data;
 
+// Universidad Tecnológica Metropolitana
+// Aplicaciones Web Orientada a Servicios
+// Maestro: Joel Ivan Chuc UC
+// Actividad: Solucion Tecnica del Proyecto
+// Integrantes del equipo: Balam Rosas Christian Jesús, Herrera Caro Abraham Enrique, Sabido Reynoso Jonathan Missael
+// 4C
+// Parcial 2
+// Entrega: 02/11/2021
+
 namespace FindingATournamentApp.Infraestructure.Repositories
 {
     public class ClubRepository
