@@ -23,13 +23,15 @@ namespace FindingATournamentApp.Infraestructure.Data
         public virtual DbSet<ServiceClub> ServiceClubs { get; set; }
         public virtual DbSet<Tournament> Tournaments { get; set; }
 
+
+        /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(@"Server=JONA;Database=FindingATournament;User Id=sa;Password=123");
+                optionsBuilder.UseSqlServer(@"Server=JONA;Database=FindingATournament;User Id=sa;Password=maxteel22");
             }
-        }
+        } */
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

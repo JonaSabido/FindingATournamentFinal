@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\jona_\\OneDrive\\Documentos\\4C DSM\\Aplicaciones Web Servicios\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj": {}
+    "C:\\home\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\jona_\\OneDrive\\Documentos\\4C DSM\\Aplicaciones Web Servicios\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj": {
+    "C:\\home\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\jona_\\OneDrive\\Documentos\\4C DSM\\Aplicaciones Web Servicios\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj",
+        "projectUniqueName": "C:\\home\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj",
         "projectName": "FindingATournamentApp",
-        "projectPath": "C:\\Users\\jona_\\OneDrive\\Documentos\\4C DSM\\Aplicaciones Web Servicios\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj",
+        "projectPath": "C:\\home\\FindingATournament\\FindingATournamentApp\\FindingATournamentApp.csproj",
         "packagesPath": "C:\\Users\\jona_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\jona_\\OneDrive\\Documentos\\4C DSM\\Aplicaciones Web Servicios\\FindingATournament\\FindingATournamentApp\\obj\\",
+        "outputPath": "C:\\home\\FindingATournament\\FindingATournamentApp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -45,6 +45,18 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[8.1.1, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[10.3.4, )"
+            },
+            "FluentValidation.AspNetCore": {
+              "target": "Package",
+              "version": "[10.3.4, )"
+            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[5.0.11, )"

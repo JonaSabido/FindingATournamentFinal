@@ -1,13 +1,21 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO.Compression;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using FindingATournamentApp.Domain.Entities;
-using FindingATournamentApp.Domain.Dtos;
+using FindingATournamentApp.Domain.Dtos.Requests;
+using FindingATournamentApp.Domain.Dtos.Responses;
 using FindingATournamentApp.Infraestructure.Repositories;
+using FindingATournamentApp.Domain.Interfaces;
+using FluentValidation;
+using AutoMapper;
+using Microsoft.Extensions.Options;
+using FluentValidation.Results;
 
 // Universidad Tecnológica Metropolitana
 // Aplicaciones Web Orientada a Servicios
@@ -24,39 +32,36 @@ namespace FindingATournamentApp.Controllers
     [ApiController]
     public class ClubesController : ControllerBase
     {
+        private readonly IHttpContextAccessor _httpContext;
+        private readonly IClubRepository _repository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<ClubCreateRequest> _createValidator;
+        
+        public ClubesController(IHttpContextAccessor httpContext, IClubRepository repository, IMapper mapper, IValidator<ClubCreateRequest> createValidator){
+            this._httpContext = httpContext;
+            _repository = repository;
+            this._mapper = mapper;
+            this._createValidator = createValidator;
+        }
 
         [HttpGet]
         [Route("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var repository = new ClubRepository();
-            var clubes = repository.GetAll();
-            var query = clubes.Select(c => CreateDtoFromObject(c));
+            var clubes = await _repository.GetAll();
+            var respuesta = _mapper.Map<IEnumerable<Clube>, IEnumerable<ClubResponse>>(clubes);
 
-            return Ok(query);
+
+            return Ok(respuesta);
         }
 
         [HttpGet]
-        [Route("GetContains/{word}")]
-        public IActionResult GetContains(string word)
+        [Route("Filters")]
+        public async Task<IActionResult> GetByFilter(Clube club)
         {
-            var repository = new ClubRepository();
-            var clubes = repository.GetContains(word);
-            var query = clubes.Select(c => CreateDtoFromObject(c));
-
-            return Ok(query);
-        }
-
-        [HttpGet]
-        [Route("GetByPhone/{number}")]
-
-        public IActionResult GetByPhone(string number){
-
-            var repository = new ClubRepository();
-            var clubes = repository.GetByPhone(number);
-            var query = clubes.Select(c => CreateDtoFromObject(c));
-
-            return Ok(query);
+            var clubes = await _repository.GetByFilter(club);
+            var respuesta = _mapper.Map<IEnumerable<Clube>,IEnumerable<ClubResponse>>(clubes);
+            return Ok(respuesta);
         }
 
         /*
@@ -72,31 +77,22 @@ namespace FindingATournamentApp.Controllers
             return Ok(respuesta);
         }
         */
-        private ClubResponse CreateDtoFromObject(Clube club)
-        {
-            var dto = new ClubResponse
-            (
-                ClubName: club.ClubName,
-                ClubAddress: club.ClubAddress,
-                ClubContactNumber : club.ClubContactNumber,
-                ClubSchedule: club.ClubSchedule
-            );
-            return dto;
-        }
 
-        public Clube CreateObjectFromDto (ClubRequest dto)
-        {
-            var club = new Clube
-            {
-                Id=0,
-                ClubName= string.Empty,
-                ClubAddress= string.Empty,
-                ClubContactNumber= string.Empty,
-                ClubLatitude= 0,
-                ClubLength=0,
-                ClubSchedule=string.Empty
-            };
-            return club;
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody]ClubCreateRequest club){
+            
+            var validationResult = await _createValidator.ValidateAsync(club);
+            if(!validationResult.IsValid){
+                return UnprocessableEntity(validationResult.Errors.Select(x => $"Error: {x.ErrorMessage}"));
+            }
+            var entity = _mapper.Map<ClubCreateRequest, Clube>(club);
+            var id = await _repository.Create(entity);
+            if(id <= 0){
+                return Conflict("No se puede realizar el registro...");
+            }
+            var urlresult = $"https://{_httpContext.HttpContext.Request.Host.Value}/api/club/{id}";
+            return Created(urlresult, id);
         }
     }
 }
