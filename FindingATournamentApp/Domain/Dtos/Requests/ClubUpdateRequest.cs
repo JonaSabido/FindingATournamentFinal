@@ -2,7 +2,7 @@ using System;
 
 namespace FindingATournamentApp.Domain.Dtos.Requests
 {
-    public class ClubCreateRequest
+    public class ClubUpdateRequest
     {
         public string ClubName{get; set;}
         public string ClubAddress {get; set;}

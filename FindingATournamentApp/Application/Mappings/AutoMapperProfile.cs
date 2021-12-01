@@ -17,12 +17,20 @@ namespace FindingATournamentApp.Application.Mappings
             .ForMember(dest => dest.Schedule, opt => opt.MapFrom(src => src.ClubSchedule));
 
             CreateMap<ClubCreateRequest, Clube>()
-            .ForPath(dest => dest.ClubName, opt => opt.MapFrom(src => src.Name))
-            .ForPath(dest => dest.ClubAddress, opt => opt.MapFrom(src => src.Address))
-            .ForPath(dest => dest.ClubContactNumber, opt => opt.MapFrom(src => src.ContactNumber))
-            .ForPath(dest => dest.ClubLatitude, opt => opt.MapFrom(src => src.Latitude))
-            .ForPath(dest => dest.ClubLength, opt => opt.MapFrom(src => src.Lenght))
-            .ForPath(dest => dest.ClubSchedule, opt => opt.MapFrom(src => src.Schedule));
+            .ForPath(dest => dest.ClubName, opt => opt.MapFrom(src => src.ClubName))
+            .ForPath(dest => dest.ClubAddress, opt => opt.MapFrom(src => src.ClubAddress))
+            .ForPath(dest => dest.ClubContactNumber, opt => opt.MapFrom(src => src.ClubContactNumber))
+            .ForPath(dest => dest.ClubLatitude, opt => opt.MapFrom(src => src.ClubLatitude))
+            .ForPath(dest => dest.ClubLength, opt => opt.MapFrom(src => src.ClubLength))
+            .ForPath(dest => dest.ClubSchedule, opt => opt.MapFrom(src => src.ClubSchedule));
+
+            CreateMap<Clube, ClubUpdateRequest>()
+            .ForPath(dest => dest.ClubName, opt => opt.MapFrom(src => src.ClubName))
+            .ForPath(dest => dest.ClubAddress, opt => opt.MapFrom(src => src.ClubAddress))
+            .ForPath(dest => dest.ClubContactNumber, opt => opt.MapFrom(src => src.ClubContactNumber))
+            .ForPath(dest => dest.ClubLatitude, opt => opt.MapFrom(src => src.ClubLatitude))
+            .ForPath(dest => dest.ClubLength, opt => opt.MapFrom(src => src.ClubLength))
+            .ForPath(dest => dest.ClubSchedule, opt => opt.MapFrom(src => src.ClubSchedule));
         }
     }
 }

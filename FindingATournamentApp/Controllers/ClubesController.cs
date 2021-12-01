@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using FindingATournamentApp.Application.Services;
 using FindingATournamentApp.Domain.Entities;
 using FindingATournamentApp.Domain.Dtos.Requests;
 using FindingATournamentApp.Domain.Dtos.Responses;
@@ -36,12 +37,14 @@ namespace FindingATournamentApp.Controllers
         private readonly IClubRepository _repository;
         private readonly IMapper _mapper;
         private readonly IValidator<ClubCreateRequest> _createValidator;
+        private readonly IValidator<ClubUpdateRequest> _updateValidator;
         
-        public ClubesController(IHttpContextAccessor httpContext, IClubRepository repository, IMapper mapper, IValidator<ClubCreateRequest> createValidator){
+        public ClubesController(IHttpContextAccessor httpContext, IClubRepository repository, IMapper mapper, IValidator<ClubCreateRequest> createValidator, IValidator<ClubUpdateRequest> updateValidator){
             this._httpContext = httpContext;
             _repository = repository;
             this._mapper = mapper;
             this._createValidator = createValidator;
+            this._updateValidator = updateValidator;
         }
 
         [HttpGet]
@@ -50,8 +53,6 @@ namespace FindingATournamentApp.Controllers
         {
             var clubes = await _repository.GetAll();
             var respuesta = _mapper.Map<IEnumerable<Clube>, IEnumerable<ClubResponse>>(clubes);
-
-
             return Ok(respuesta);
         }
 
@@ -61,6 +62,25 @@ namespace FindingATournamentApp.Controllers
         {
             var clubes = await _repository.GetByFilter(club);
             var respuesta = _mapper.Map<IEnumerable<Clube>,IEnumerable<ClubResponse>>(clubes);
+            if(respuesta.Count() == 0){
+                return NoContent();
+                //return NotFound("No fue posible encontrar un club con los filtros proporcionados");
+            }            
+            return Ok(respuesta);
+        }
+
+        [HttpGet]
+        [Route("Id/{id:int}")]
+        public async Task<IActionResult> GetById(int id){
+            
+            var club = await _repository.GetById(id);
+            var respuesta = _mapper.Map<Clube,ClubResponse>(club);
+
+            if(respuesta == null){
+                return NoContent();
+                //return NotFound("No fue posible encontrar un club con el id proporcionado");
+            }
+
             return Ok(respuesta);
         }
 
@@ -93,6 +113,44 @@ namespace FindingATournamentApp.Controllers
             }
             var urlresult = $"https://{_httpContext.HttpContext.Request.Host.Value}/api/club/{id}";
             return Created(urlresult, id);
+        }
+
+        [HttpPut]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody]Clube club)
+        {
+            if(id <= 0 || !_repository.Exist(i => i.Id == id))
+                return NotFound("El registro no fué encontrado, veifica tu información...");
+
+            club.Id = id;
+
+            ClubUpdateRequest clubRequest = new ClubUpdateRequest();
+            clubRequest.ClubName = club.ClubName;
+            clubRequest.ClubAddress = club.ClubAddress ;
+            clubRequest.ClubContactNumber = club.ClubContactNumber;
+            clubRequest.ClubLatitude = club.ClubLatitude;
+            clubRequest.ClubLength = club.ClubLength;
+            clubRequest.ClubSchedule = club.ClubSchedule;
+
+            var validationResult2 = await _updateValidator.ValidateAsync(clubRequest);
+            
+            if(!validationResult2.IsValid){
+                return UnprocessableEntity(validationResult2.Errors.Select(x => $"Error: {x.ErrorMessage}"));
+            }
+
+            ClubService service = new ClubService(_repository);
+            var validate = service.ValidateUpdate(club);
+            
+            if(!validate)
+                return UnprocessableEntity("No es posible realizar la modificación, verifica tu información...");
+
+            var update = await _repository.Update(id, club);
+
+            if(!update)
+                return Conflict("Ocurrió un fallo al intentar realizar la modificación...");
+
+            return Ok("Se han actualizado los datos correctamente...");
+            
         }
     }
 }

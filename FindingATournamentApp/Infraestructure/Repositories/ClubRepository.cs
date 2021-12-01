@@ -40,25 +40,10 @@ namespace FindingATournamentApp.Infraestructure.Repositories
 
         public async Task<Clube> GetById(int id)
         {            
-            var query = await _context.Clubes.Include(x => x.ClubAddress).FirstOrDefaultAsync(x => x.Id == id);
+            var query = await _context.Clubes.FirstOrDefaultAsync(x => x.Id == id);
             return query;
 
-            /* var query = await _context.People.AsQueryable().Join(_context.Addresses, 
-            p => p.Id,
-            a => a.PersonId,
-            (p, a) => new Person {
-                Id = p.Id,
-                FirstName = p.FirstName,
-                LastName = p.LastName,
-                Email = p.Email,
-                Age = p.Age,
-                Gender = p.Gender,
-                Job = p.Job,
-                Address = a   
-            }
-            ).FirstOrDefaultAsync(x => x.Id == id); 
 
-            return query;*/
         }
 
         public bool Exist(Expression<Func<Clube, bool>> expression)
@@ -121,6 +106,26 @@ namespace FindingATournamentApp.Infraestructure.Repositories
             }
 
             return entity.Id;
+        }
+
+        public async Task<bool> Update(int id,  Clube club)
+        {
+            if(id <= 0 || club == null)
+                throw new ArgumentException("Falta información para continuar con el proceso de modificación...");
+
+            var entity = await GetById(id);
+
+            entity.ClubName = club.ClubName;
+            entity.ClubAddress = club.ClubAddress;
+            entity.ClubContactNumber = club.ClubContactNumber;
+            entity.ClubLatitude = club.ClubLatitude;
+            entity.ClubLength = club.ClubLength;
+            entity.ClubSchedule = club.ClubSchedule;
+
+            _context.Update(entity);
+
+            var rows = await _context.SaveChangesAsync();
+            return rows > 0;
         }
     }
 }

@@ -11,8 +11,9 @@ namespace FindingATournamentApp.Domain.Interfaces
     {
         Task<Clube> GetById (int id);
         Task<IQueryable<Clube>> GetAll();
-        
         Task<IQueryable<Clube>> GetByFilter(Clube clube);
         Task<int> Create(Clube club);
+        Task<bool> Update(int id, Clube club);
+        bool Exist(Expression<Func<Clube, bool>> expression);
     }
 }

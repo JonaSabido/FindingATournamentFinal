@@ -5,14 +5,15 @@ using FindingATournamentApp.Domain.Interfaces;
 
 namespace FindingATournamentApp.Infraestructure.Validators
 {
-    public class ClubCreateRequestValidator : AbstractValidator<ClubCreateRequest>
+    public class ClubUpdateRequestValidator : AbstractValidator<ClubUpdateRequest>
     {
         private readonly IClubRepository _repository;
 
-        public ClubCreateRequestValidator(IClubRepository repository)
+        public ClubUpdateRequestValidator(IClubRepository repository)
         {
             this._repository = repository;
-            RuleFor(x => x.ClubName).NotNull().Must(NotExistName).WithMessage("Ya existe un club con ese nombre");
+
+            RuleFor(x => x.ClubName).NotNull();;
             RuleFor(x => x.ClubAddress).NotNull();
             RuleFor(x => x.ClubContactNumber).NotNull()
                     .Must(ContactNumerSinLetras).WithMessage("El formato de número telefónico no es válido") 
@@ -41,11 +42,6 @@ namespace FindingATournamentApp.Infraestructure.Validators
             
             return false;
 
-        }
-
-        public bool NotExistName(string name) 
-        {
-            return !_repository.Exist(c => c.ClubName == name);
         }
 
     }

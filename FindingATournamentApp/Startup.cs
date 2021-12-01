@@ -52,6 +52,7 @@ namespace FindingATournamentApp
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IValidator<ClubCreateRequest>, ClubCreateRequestValidator>();
+            services.AddScoped<IValidator<ClubUpdateRequest>, ClubUpdateRequestValidator>();
 
         }
 
