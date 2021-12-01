@@ -24,8 +24,8 @@ using FluentValidation.Results;
 // Actividad: Solucion Tecnica del Proyecto
 // Integrantes del equipo: Balam Rosas Christian Jesús, Herrera Caro Abraham Enrique, Sabido Reynoso Jonathan Missael
 // 4C
-// Parcial 2
-// Entrega: 02/11/2021
+// Parcial 3
+// Entrega: 01/12/2021
 
 namespace FindingATournamentApp.Controllers
 {
