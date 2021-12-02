@@ -61,7 +61,7 @@ namespace FindingATournamentApp.Infraestructure.Repositories
                 query = query.Where(x => x.ClubName.Contains(clube.ClubName));
 
             if(!string.IsNullOrEmpty(clube.ClubAddress))
-                query = query.Where(x => x.ClubAddress == clube.ClubAddress);
+                query = query.Where(x => x.ClubAddress.Contains(clube.ClubAddress));
 
             if(!string.IsNullOrEmpty(clube.ClubContactNumber))
                 query = query.Where(x => x.ClubContactNumber == clube.ClubContactNumber);
@@ -73,7 +73,7 @@ namespace FindingATournamentApp.Infraestructure.Repositories
                 query = query.Where(x => x.ClubLength == clube.ClubLength);
 
             if(!string.IsNullOrEmpty(clube.ClubSchedule))
-                query = query.Where(x => x.ClubSchedule == clube.ClubSchedule);
+                query = query.Where(x => x.ClubSchedule.Contains(clube.ClubSchedule));
 
             var result = await query.ToListAsync();
 
